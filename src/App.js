@@ -76,6 +76,7 @@ const App = () => {
             <label>Leverage *</label>
             <input
               type="number"
+              min="0"
               onChange={(e) => setLeverage(e.target.value)}
               required
             />
