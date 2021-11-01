@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const App = () => {
   const [entryPriceOfCoin, setEntryPriceOfCoin] = useState();
-  const [totalBudget, setTotalBudget] = useState();
+  const [totalMargin, setTotalMargin] = useState();
   const [leverage, setLeverage] = useState();
   const [percentages, setPercntages] = useState();
 
@@ -15,35 +15,35 @@ const App = () => {
     return 1 + percentage / 100;
   };
 
-  const percentageCal = (entryprice, budget, lev, percentageValue) => {
+  const percentageCal = (entryprice, margin, lev, percentageValue) => {
     percentageValue = percentageToRequired(percentageValue);
-    const margin = convertFloatDec5(budget * lev),
-      holdingCoins = convertFloatDec5(margin / entryprice),
-      percent = margin - budget + budget * percentageValue,
+    const size = convertFloatDec5(margin * lev),
+      holdingCoins = convertFloatDec5(size / entryprice),
+      percent = size - margin + margin * percentageValue,
       coinProfitPrice = convertFloatDec5(percent / holdingCoins),
       liqDif = convertFloatDec5(coinProfitPrice - entryprice),
       coinLiqPrice = entryprice - liqDif;
     return {
       coinProfitPrice,
       coinLiqPrice,
-      margin,
+      size,
       holdingCoins,
     };
   };
 
   const submit = (e) => {
     e.preventDefault();
-    const _100 = percentageCal(entryPriceOfCoin, totalBudget, leverage, 100);
-    const _50 = percentageCal(entryPriceOfCoin, totalBudget, leverage, 50);
-    const _75 = percentageCal(entryPriceOfCoin, totalBudget, leverage, 75);
-    const _25 = percentageCal(entryPriceOfCoin, totalBudget, leverage, 25);
-    const _10 = percentageCal(entryPriceOfCoin, totalBudget, leverage, 10);
+    const _100 = percentageCal(entryPriceOfCoin, totalMargin, leverage, 100);
+    const _50 = percentageCal(entryPriceOfCoin, totalMargin, leverage, 50);
+    const _75 = percentageCal(entryPriceOfCoin, totalMargin, leverage, 75);
+    const _25 = percentageCal(entryPriceOfCoin, totalMargin, leverage, 25);
+    const _10 = percentageCal(entryPriceOfCoin, totalMargin, leverage, 10);
     setPercntages({
       _100,
       _75,
       _50,
       _25,
-      _10
+      _10,
     });
   };
 
@@ -55,7 +55,9 @@ const App = () => {
       <form className="form" onSubmit={submit}>
         <div>
           <div className="field">
-            <label>Entry Price *</label>
+            <label>
+              Entry Price <span>*</span>
+            </label>
             <input
               type="number"
               min="0"
@@ -65,20 +67,25 @@ const App = () => {
             />
           </div>
           <div className="field">
-            <label>Budget *</label>
+            <label>
+              Margin <span>*</span>
+            </label>
             <input
               type="number"
               min="0"
               step="any"
-              onChange={(e) => setTotalBudget(e.target.value)}
+              onChange={(e) => setTotalMargin(e.target.value)}
               required
             />
           </div>
           <div className="field">
-            <label>Leverage *</label>
+            <label>
+              Leverage <span>*</span>
+            </label>
             <input
               type="number"
               min="0"
+              max="125"
               step="any"
               onChange={(e) => setLeverage(e.target.value)}
               required
@@ -99,15 +106,15 @@ const App = () => {
 
           <div className="form">
             <div className="field">
-              <label>Coins</label>
+              <label>Size (Coin)</label>
               <p>{percentages?._100?.holdingCoins}</p>
             </div>
             <div className="field">
-              <label>Margin</label>
-              <p>{percentages?._100?.margin}</p>
+              <label>Size (USDT)</label>
+              <p>{percentages?._100?.size}</p>
             </div>
-            <div>
-              <div className="percent">
+            <div className="percent">
+              <div>
                 <h5>100 %</h5>
               </div>
               <div>
@@ -129,8 +136,8 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <div className="percent">
+            <div className="percent">
+              <div>
                 <h5>75 %</h5>
               </div>
               <div>
@@ -152,8 +159,8 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <div className="percent">
+            <div className="percent">
+              <div>
                 <h5>50 %</h5>
               </div>
               <div>
@@ -175,8 +182,8 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <div className="percent">
+            <div className="percent">
+              <div>
                 <h5>25 %</h5>
               </div>
               <div>
@@ -198,8 +205,8 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <div className="percent">
+            <div className="percent">
+              <div>
                 <h5>10 %</h5>
               </div>
               <div>
