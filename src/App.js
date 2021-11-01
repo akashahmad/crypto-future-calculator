@@ -59,6 +59,7 @@ const App = () => {
             <input
               type="number"
               min="0"
+              step="any"
               onChange={(e) => setEntryPriceOfCoin(e.target.value)}
               required
             />
@@ -68,6 +69,7 @@ const App = () => {
             <input
               type="number"
               min="0"
+              step="any"
               onChange={(e) => setTotalBudget(e.target.value)}
               required
             />
@@ -77,6 +79,7 @@ const App = () => {
             <input
               type="number"
               min="0"
+              step="any"
               onChange={(e) => setLeverage(e.target.value)}
               required
             />
